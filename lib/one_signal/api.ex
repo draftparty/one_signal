@@ -1,6 +1,6 @@
 defmodule OneSignal.API do
 
-  def get(url, query \\ []) do
+  def get(url, query \\ [], opts \\ %{}) do
     HTTPoison.start
     query = OneSignal.Utils.encode_body(query)
 
@@ -8,16 +8,16 @@ defmodule OneSignal.API do
       url = "#{url}?#{query}"
     end
 
-    HTTPoison.get!(url, OneSignal.auth_header)
+    HTTPoison.get!(url, OneSignal.auth_header(opts))
     |> handle_response
   end
 
-  def post(url, body) do
+  def post(url, body, opts \\ %{}) do
     HTTPoison.start
 
     req_body = Poison.encode!(body)
 
-    HTTPoison.post!(url, req_body, OneSignal.auth_header)
+    HTTPoison.post!(url, req_body, OneSignal.auth_header(opts))
     |> handle_response
   end
 
